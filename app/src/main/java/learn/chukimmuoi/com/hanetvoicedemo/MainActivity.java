@@ -1,6 +1,5 @@
 package learn.chukimmuoi.com.hanetvoicedemo;
 
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -16,12 +15,8 @@ import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
 import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
-import learn.chukimmuoi.com.hanetvoicedemo.broadcast.SpeechBroadcast;
 import learn.chukimmuoi.com.hanetvoicedemo.speech.SpeechManager;
 import learn.chukimmuoi.com.hanetvoicedemo.ui.SpeechProgressView;
-
-import static learn.chukimmuoi.com.hanetvoicedemo.service.SpeechService.ACTION_START;
-import static learn.chukimmuoi.com.hanetvoicedemo.service.SpeechService.ACTION_STOP;
 
 public class MainActivity extends AppCompatActivity implements MainView, VoiceView, RecognitionListener {
 
@@ -51,8 +46,6 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
 
     private SpeechManager mSpeechManager;
 
-    private SpeechBroadcast mSpeechBroadcast;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,16 +73,6 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        mSpeechBroadcast = new SpeechBroadcast(mSpeechManager);
-
-        registerReceiver(mSpeechBroadcast, new IntentFilter(ACTION_START));
-        registerReceiver(mSpeechBroadcast, new IntentFilter(ACTION_STOP));
-    }
-
-    @Override
     public void actionShowVoice(String voiceMessage) {
         if (voiceMessage.contains(VALUE_CHECK_RESULT_01)
                 || voiceMessage.contains(VALUE_CHECK_RESULT_02)
@@ -105,8 +88,8 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
             mVoice.setText(getString(R.string.main_message_help));
             mVoiceLayout.setVisibility(View.VISIBLE);
 
-            if (mSpeechBroadcast != null) {
-                mSpeechBroadcast.handleActionStart();
+            if (mSpeechManager != null) {
+                mSpeechManager.onStart();
             }
         }
     }
@@ -116,6 +99,10 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
         if (mVoiceLayout != null) {
             start(mRecognizer);
             mVoiceLayout.setVisibility(View.GONE);
+
+            if (mSpeechManager != null) {
+                mSpeechManager.onStop();
+            }
         }
     }
 
@@ -204,13 +191,6 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
     public void onTimeout() {
         Log.e(TAG, "6) onTimeout");
 
-    }
-
-    @Override
-    protected void onStop() {
-        unregisterReceiver(mSpeechBroadcast);
-
-        super.onStop();
     }
 
     @Override

@@ -1,9 +1,7 @@
 package learn.chukimmuoi.com.hanetvoicedemo.listener;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.speech.RecognitionListener;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
@@ -11,11 +9,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import learn.chukimmuoi.com.hanetvoicedemo.service.SpeechService;
 import learn.chukimmuoi.com.hanetvoicedemo.speech.SpeechManager;
 import learn.chukimmuoi.com.hanetvoicedemo.ui.SpeechProgressView;
-
-import static learn.chukimmuoi.com.hanetvoicedemo.service.SpeechService.ACTION_START;
 
 /**
  * @author:Hanet Electronics
@@ -30,12 +25,6 @@ import static learn.chukimmuoi.com.hanetvoicedemo.service.SpeechService.ACTION_S
 public class SpeechListener implements RecognitionListener {
 
     private static final String TAG = SpeechListener.class.getSimpleName();
-
-    private static final long MILLIS_IN_FUTURE = 10000;
-
-    private static final long COUNT_DOWN_INTERVAL = 1000;
-
-    private static final long MIN_MILLIS_UNTIL_FINISHED = 3000;
 
     private Context mContext;
 
@@ -56,7 +45,6 @@ public class SpeechListener implements RecognitionListener {
     @Override
     public void onReadyForSpeech(Bundle params) {
         Log.e(TAG, "onReadyForSpeech");
-        mCountDownTimer.start();
     }
 
     @Override
@@ -95,20 +83,14 @@ public class SpeechListener implements RecognitionListener {
         Log.e(TAG, "onError");
         mSpeechManager.setListening(false);
 
-        mCountDownTimer.cancel();
-
         if (mProgress != null)
             mProgress.onResultOrOnError();
-
-        actionStart(mContext);
     }
 
     @Override
     public void onResults(Bundle results) {
         Log.e(TAG, "onResults");
         mSpeechManager.setListening(false);
-
-        mCountDownTimer.cancel();
 
         String str = new String();
         ArrayList data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
@@ -120,46 +102,15 @@ public class SpeechListener implements RecognitionListener {
 
         if (mProgress != null)
             mProgress.onResultOrOnError();
-
-        actionStart(mContext);
     }
 
     @Override
     public void onPartialResults(Bundle partialResults) {
         Log.e(TAG, "onPartialResults");
-
     }
 
     @Override
     public void onEvent(int eventType, Bundle params) {
         Log.e(TAG, "onEvent");
-
     }
-
-    private void actionStop(Context context) {
-        Intent intent = new Intent(context, SpeechService.class);
-        intent.setAction(SpeechService.ACTION_STOP);
-        context.startService(intent);
-    }
-
-    private void actionStart(Context context) {
-        Intent intent = new Intent(context, SpeechService.class);
-        intent.setAction(ACTION_START);
-        context.startService(intent);
-    }
-
-    private CountDownTimer mCountDownTimer
-            = new CountDownTimer(MILLIS_IN_FUTURE, COUNT_DOWN_INTERVAL) {
-        @Override
-        public void onTick(long millisUntilFinished) {
-            if (millisUntilFinished < MIN_MILLIS_UNTIL_FINISHED) {
-                actionStop(mContext);
-            }
-        }
-
-        @Override
-        public void onFinish() {
-            actionStart(mContext);
-        }
-    };
 }

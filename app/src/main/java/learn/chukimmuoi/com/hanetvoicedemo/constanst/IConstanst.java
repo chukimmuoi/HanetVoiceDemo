@@ -17,5 +17,5 @@ public interface IConstanst {
     public static final String EXTRA_ADDITIONAL_LANGUAGES
             = "android.speech.extra.EXTRA_ADDITIONAL_LANGUAGES";
     public static final float EXTRA_CONFIDENCE_SCORES = 1.0f;
-    public static final int EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS = 30 * 1000;
+    public static final int EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS = 60 * 1000;
 }
