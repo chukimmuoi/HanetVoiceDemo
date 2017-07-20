@@ -1,5 +1,7 @@
 package learn.chukimmuoi.com.hanetvoicedemo;
 
+import edu.cmu.pocketsphinx.SpeechRecognizer;
+
 /**
  * @author:Hanet Electronics
  * @Skype: chukimmuoi
@@ -11,10 +13,12 @@ package learn.chukimmuoi.com.hanetvoicedemo;
  */
 
 
-public class MainPresenter {
-    private static final String TAG = MainPresenter.class.getSimpleName();
+public interface VoiceView {
+    SpeechRecognizer setupRecognizer();
 
-    private MainView mMainView;
+    void start(SpeechRecognizer recognizer);
 
-    private VoiceView mVoiceView;
+    void stop(SpeechRecognizer recognizer);
+
+    void refresh(SpeechRecognizer recognizer);
 }

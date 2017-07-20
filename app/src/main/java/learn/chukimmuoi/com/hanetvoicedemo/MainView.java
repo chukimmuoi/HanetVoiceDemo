@@ -12,6 +12,8 @@ package learn.chukimmuoi.com.hanetvoicedemo;
 
 
 public interface MainView {
+    void actionShowVoice(String voiceMessage);
+
     void showVoiceLayout();
 
     void hideVoiceLayout();
