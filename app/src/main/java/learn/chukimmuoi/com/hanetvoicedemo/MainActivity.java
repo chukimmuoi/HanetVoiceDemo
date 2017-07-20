@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
 
     private SpeechProgressView mProgress;
 
-    private TextView mMessage;
+    private TextView mVoice;
 
     private MainPresenter mPresenter;
 
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
     private void initUI() {
         mVoiceLayout = (LinearLayout) findViewById(R.id.voice);
         mProgress = (SpeechProgressView) findViewById(R.id.progress);
-        mMessage = (TextView) findViewById(R.id.message);
+        mVoice = (TextView) findViewById(R.id.message);
 
         hideVoiceLayout();
     }
@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
     @Override
     public void actionShowVoice(String voiceMessage) {
         if (voiceMessage.contains(VALUE_CHECK_RESULT_01)
-                || voiceMessage.contains(VALUE_CHECK_RESULT_01)
-                || voiceMessage.contains(VALUE_CHECK_RESULT_01)) {
+                || voiceMessage.contains(VALUE_CHECK_RESULT_02)
+                || voiceMessage.contains(VALUE_CHECK_RESULT_03)) {
             showVoiceLayout();
         }
     }
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
     public void showVoiceLayout() {
         if (mVoiceLayout != null) {
             stop(mRecognizer);
-            mMessage.setText(getString(R.string.main_message_help));
+            mVoice.setText(getString(R.string.main_message_help));
             mVoiceLayout.setVisibility(View.VISIBLE);
         }
     }
@@ -178,5 +178,10 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
     public void onTimeout() {
         Log.e(TAG, "6) onTimeout");
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

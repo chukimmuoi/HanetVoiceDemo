@@ -12,11 +12,11 @@
         android:layout_width="666dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone">
+        app:layout_constraintTop_toTopOf="parent">
 
         <learn.chukimmuoi.com.hanetvoicedemo.ui.SpeechProgressView
             android:id="@+id/progress"
@@ -28,7 +28,9 @@
             android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:textColor="#000000"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
