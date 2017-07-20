@@ -2,7 +2,6 @@ package learn.chukimmuoi.com.hanetvoicedemo.listener;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.speech.RecognitionListener;
@@ -40,26 +39,17 @@ public class SpeechListener implements RecognitionListener {
 
     private Context mContext;
 
-    private AudioManager mAudioManager;
-
     private SpeechProgressView mProgress;
 
     private TextView mTextVoice;
 
-    private TextView mTextMessage;
-
-    private int mStreamVolume;
-
     private SpeechManager mSpeechManager;
 
-    public SpeechListener(Context context, AudioManager audioManager, int streamVolume, SpeechProgressView progress,
-                          TextView textVoice, TextView textMessage, SpeechManager speechManager) {
+    public SpeechListener(Context context, SpeechProgressView progress,
+                          TextView textVoice, SpeechManager speechManager) {
         mContext       = context;
-        mAudioManager  = audioManager;
-        mStreamVolume  = streamVolume;
         mProgress      = progress;
         mTextVoice     = textVoice;
-        mTextMessage   = textMessage;
         mSpeechManager = speechManager;
     }
 
@@ -67,10 +57,6 @@ public class SpeechListener implements RecognitionListener {
     public void onReadyForSpeech(Bundle params) {
         Log.e(TAG, "onReadyForSpeech");
         mCountDownTimer.start();
-
-        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mStreamVolume, 0);
-
-        mTextMessage.setText("Listening...");
     }
 
     @Override
@@ -80,8 +66,6 @@ public class SpeechListener implements RecognitionListener {
             mProgress.onBeginningOfSpeech();
 
         mSpeechManager.setListening(true);
-
-        mTextMessage.setText("Listening...");
     }
 
     @Override
@@ -133,7 +117,6 @@ public class SpeechListener implements RecognitionListener {
             str += ((i != 0) ? ",\n" : "") + data.get(i);
         }
         mTextVoice.setText(str);
-        mTextMessage.setText("Success");
 
         if (mProgress != null)
             mProgress.onResultOrOnError();

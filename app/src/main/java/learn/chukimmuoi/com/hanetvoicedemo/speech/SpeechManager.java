@@ -2,7 +2,6 @@ package learn.chukimmuoi.com.hanetvoicedemo.speech;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.widget.TextView;
@@ -32,10 +31,6 @@ public class SpeechManager implements IConstanst {
 
     private Intent mIntent;
 
-    private AudioManager mAudioManager;
-
-    private int mStreamVolume;
-
     private boolean isListening;
 
     public static SpeechManager getInstance() {
@@ -47,10 +42,8 @@ public class SpeechManager implements IConstanst {
         return ourInstance;
     }
 
-    public SpeechManager onCreate(Context context, SpeechProgressView progress, TextView textVoice, TextView textMessage) {
-        mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-
-        initialSpeech(context, progress, textVoice, textMessage);
+    public SpeechManager onCreate(Context context, SpeechProgressView progress, TextView textVoice) {
+        initialSpeech(context, progress, textVoice);
         return ourInstance;
     }
 
@@ -63,10 +56,6 @@ public class SpeechManager implements IConstanst {
     }
 
     public void onDestroy() {
-        if (mAudioManager != null) {
-            mAudioManager = null;
-        }
-
         if (mSpeechRecognizer != null) {
             stopListener();
             mSpeechRecognizer.destroy();
@@ -78,11 +67,9 @@ public class SpeechManager implements IConstanst {
         }
     }
 
-    private void initialSpeech(Context context, SpeechProgressView progress,
-                               TextView textVoice, TextView textMessage) {
+    private void initialSpeech(Context context, SpeechProgressView progress, TextView textVoice) {
         mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(context);
-        mSpeechRecognizer.setRecognitionListener(new SpeechListener(context, mAudioManager,
-                mStreamVolume, progress, textVoice, textMessage, ourInstance));
+        mSpeechRecognizer.setRecognitionListener(new SpeechListener(context, progress, textVoice, ourInstance));
 
         mIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         mIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
