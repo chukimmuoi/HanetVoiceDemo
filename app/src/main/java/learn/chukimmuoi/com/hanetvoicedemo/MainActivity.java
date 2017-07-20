@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
             mResultState.setImageResource(R.drawable.ic_done);
         } else {
             mResultState.setImageResource(R.drawable.ic_error);
+            mVoice.setText(getString(R.string.main_message_error));
         }
         mResultState.setVisibility(View.VISIBLE);
 
