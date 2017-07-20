@@ -48,12 +48,10 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mPresenter = new MainPresenter();
+        mPresenter = new MainPresenter(this, this);
 
         initUI();
         initVoice();
-
-
     }
 
     private void initUI() {
@@ -75,21 +73,24 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
                 || voiceMessage.contains(VALUE_CHECK_RESULT_01)
                 || voiceMessage.contains(VALUE_CHECK_RESULT_01)) {
             showVoiceLayout();
-
-            stop(mRecognizer);
         }
     }
 
     @Override
     public void showVoiceLayout() {
-        if (mVoiceLayout != null)
+        if (mVoiceLayout != null) {
+            stop(mRecognizer);
+            mMessage.setText(getString(R.string.main_message_help));
             mVoiceLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void hideVoiceLayout() {
-        if (mVoiceLayout != null)
+        if (mVoiceLayout != null) {
+            start(mRecognizer);
             mVoiceLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override

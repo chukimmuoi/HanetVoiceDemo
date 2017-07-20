@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">HanetVoiceDemo</string>
+
+    <string name="main_message_help">HANET có thể giúp gì cho bạn?</string>
 </resources>

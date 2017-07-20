@@ -17,4 +17,9 @@ public class MainPresenter {
     private MainView mMainView;
 
     private VoiceView mVoiceView;
+
+    public MainPresenter(MainView mMainView, VoiceView mVoiceView) {
+        this.mMainView = mMainView;
+        this.mVoiceView = mVoiceView;
+    }
 }
