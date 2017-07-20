@@ -33,10 +33,13 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
     private static final String VALUE_CHECK_RESULT_01 = "ha net";
     private static final String VALUE_CHECK_RESULT_02 = "net ha";
     private static final String VALUE_CHECK_RESULT_03 = "ok ha net";
+    private static final String VALUE_CHECK_RESULT_04 = "net";
 
     private LinearLayout mVoiceLayout;
 
     private SpeechProgressView mProgress;
+
+    private TextView mSay;
 
     private TextView mVoice;
 
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
         mVoiceLayout = (LinearLayout) findViewById(R.id.voice);
         mProgress = (SpeechProgressView) findViewById(R.id.progress);
         mVoice = (TextView) findViewById(R.id.message);
+        mSay = (TextView) findViewById(R.id.say);
 
         hideVoiceLayout();
     }
@@ -69,14 +73,17 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
         mRecognizer = setupRecognizer();
         start(mRecognizer);
 
-        mSpeechManager = SpeechManager.getInstance().onCreate(MainActivity.this, mProgress, mVoice);
+        mSpeechManager = SpeechManager.getInstance().onCreate(MainActivity.this, this, mProgress, mVoice);
     }
 
     @Override
     public void actionShowVoice(String voiceMessage) {
+        Log.e(TAG, "actionShowVoice: voiceMessage = " + voiceMessage);
+
         if (voiceMessage.contains(VALUE_CHECK_RESULT_01)
                 || voiceMessage.contains(VALUE_CHECK_RESULT_02)
-                || voiceMessage.contains(VALUE_CHECK_RESULT_03)) {
+                || voiceMessage.contains(VALUE_CHECK_RESULT_03)
+                || voiceMessage.contains(VALUE_CHECK_RESULT_04)) {
             showVoiceLayout();
         }
     }
@@ -85,7 +92,9 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
     public void showVoiceLayout() {
         if (mVoiceLayout != null) {
             stop(mRecognizer);
+
             mVoice.setText(getString(R.string.main_message_help));
+            mSay.setVisibility(View.GONE);
             mVoiceLayout.setVisibility(View.VISIBLE);
 
             if (mSpeechManager != null) {
@@ -98,11 +107,8 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
     public void hideVoiceLayout() {
         if (mVoiceLayout != null) {
             start(mRecognizer);
+            mSay.setVisibility(View.VISIBLE);
             mVoiceLayout.setVisibility(View.GONE);
-
-            if (mSpeechManager != null) {
-                mSpeechManager.onStop();
-            }
         }
     }
 

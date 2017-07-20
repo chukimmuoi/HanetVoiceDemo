@@ -1,7 +1,7 @@
 package learn.chukimmuoi.com.hanetvoicedemo.listener;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import learn.chukimmuoi.com.hanetvoicedemo.MainView;
 import learn.chukimmuoi.com.hanetvoicedemo.speech.SpeechManager;
 import learn.chukimmuoi.com.hanetvoicedemo.ui.SpeechProgressView;
 
@@ -26,7 +27,7 @@ public class SpeechListener implements RecognitionListener {
 
     private static final String TAG = SpeechListener.class.getSimpleName();
 
-    private Context mContext;
+    public static final int TIME_DELAY_HIDE_LAYOUT_VOICE = 3 * 1000;
 
     private SpeechProgressView mProgress;
 
@@ -34,9 +35,14 @@ public class SpeechListener implements RecognitionListener {
 
     private SpeechManager mSpeechManager;
 
-    public SpeechListener(Context context, SpeechProgressView progress,
+    private MainView mMainView;
+
+    private Handler mHandler;
+
+    public SpeechListener(Handler handler, MainView mainView, SpeechProgressView progress,
                           TextView textVoice, SpeechManager speechManager) {
-        mContext       = context;
+        mHandler       = handler;
+        mMainView      = mainView;
         mProgress      = progress;
         mTextVoice     = textVoice;
         mSpeechManager = speechManager;
@@ -85,6 +91,8 @@ public class SpeechListener implements RecognitionListener {
 
         if (mProgress != null)
             mProgress.onResultOrOnError();
+
+        hideVoiceLayout();
     }
 
     @Override
@@ -102,6 +110,8 @@ public class SpeechListener implements RecognitionListener {
 
         if (mProgress != null)
             mProgress.onResultOrOnError();
+
+        hideVoiceLayout();
     }
 
     @Override
@@ -112,5 +122,17 @@ public class SpeechListener implements RecognitionListener {
     @Override
     public void onEvent(int eventType, Bundle params) {
         Log.e(TAG, "onEvent");
+    }
+
+    private void hideVoiceLayout(){
+        if(mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mMainView.hideVoiceLayout();
+                }
+            }, TIME_DELAY_HIDE_LAYOUT_VOICE);
+        }
     }
 }
