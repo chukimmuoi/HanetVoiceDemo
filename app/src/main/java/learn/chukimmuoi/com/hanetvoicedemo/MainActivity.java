@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
 
     private TextView mVoice;
 
+    private ImageView mResultState;
+
     private MainPresenter mPresenter;
 
     private SpeechRecognizer mRecognizer;
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
         mProgress = (SpeechProgressView) findViewById(R.id.progress);
         mVoice = (TextView) findViewById(R.id.message);
         mSay = (TextView) findViewById(R.id.say);
+        mResultState = (ImageView) findViewById(R.id.img_result_state);
 
         hideVoiceLayout();
     }
@@ -96,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
             mVoice.setText(getString(R.string.main_message_help));
             mSay.setVisibility(View.GONE);
             mVoiceLayout.setVisibility(View.VISIBLE);
+            mProgress.setVisibility(View.VISIBLE);
+            mResultState.setVisibility(View.GONE);
 
             if (mSpeechManager != null) {
                 mSpeechManager.onStart();
@@ -109,7 +115,21 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
             start(mRecognizer);
             mSay.setVisibility(View.VISIBLE);
             mVoiceLayout.setVisibility(View.GONE);
+            mProgress.setVisibility(View.GONE);
+            mResultState.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void updateStateResult(boolean isSuccess) {
+        mProgress.setVisibility(View.GONE);
+        if(isSuccess) {
+            mResultState.setImageResource(R.drawable.ic_done);
+        } else {
+            mResultState.setImageResource(R.drawable.ic_error);
+        }
+        mResultState.setVisibility(View.VISIBLE);
+
     }
 
     @Override

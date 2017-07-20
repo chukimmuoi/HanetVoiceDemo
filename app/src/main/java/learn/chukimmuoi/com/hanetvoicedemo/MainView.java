@@ -17,4 +17,6 @@ public interface MainView {
     void showVoiceLayout();
 
     void hideVoiceLayout();
+
+    void updateStateResult(boolean isSuccess);
 }

@@ -92,7 +92,7 @@ public class SpeechListener implements RecognitionListener {
         if (mProgress != null)
             mProgress.onResultOrOnError();
 
-        hideVoiceLayout();
+        hideVoiceLayout(false);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class SpeechListener implements RecognitionListener {
         if (mProgress != null)
             mProgress.onResultOrOnError();
 
-        hideVoiceLayout();
+        hideVoiceLayout(true);
     }
 
     @Override
@@ -124,7 +124,9 @@ public class SpeechListener implements RecognitionListener {
         Log.e(TAG, "onEvent");
     }
 
-    private void hideVoiceLayout(){
+    private void hideVoiceLayout(boolean isSuccess) {
+        mMainView.updateStateResult(isSuccess);
+
         if(mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
             mHandler.postDelayed(new Runnable() {
