@@ -1,5 +1,6 @@
 package learn.chukimmuoi.com.hanetvoicedemo;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -10,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
+import java.util.Random;
 
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
         if (mVoiceLayout != null) {
             stop(mRecognizer);
 
-            mVoice.setText(getString(R.string.main_message_help));
+            mVoice.setText(getHintMessage(this));
             mSay.setVisibility(View.GONE);
             mVoiceLayout.setVisibility(View.VISIBLE);
             mProgress.setVisibility(View.VISIBLE);
@@ -123,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
     @Override
     public void updateStateResult(boolean isSuccess) {
         mProgress.setVisibility(View.GONE);
-        if(isSuccess) {
+        if (isSuccess) {
             mResultState.setImageResource(R.drawable.ic_done);
         } else {
             mResultState.setImageResource(R.drawable.ic_error);
@@ -227,5 +229,22 @@ public class MainActivity extends AppCompatActivity implements MainView, VoiceVi
         }
 
         super.onDestroy();
+    }
+
+    private String getHintMessage(Context context) {
+        String output = "";
+        String[] arrayHint = context.getResources().getStringArray(R.array.hanet_hint);
+        if (arrayHint != null) {
+            int size = arrayHint.length;
+            Random random = new Random();
+            int indexRandom = random.nextInt(size);
+            output = arrayHint[indexRandom];
+        }
+
+        if (TextUtils.isEmpty(output)) {
+            output = context.getString(R.string.main_message_help);
+        }
+
+        return output;
     }
 }

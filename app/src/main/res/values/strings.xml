@@ -2,5 +2,18 @@
     <string name="app_name">HanetVoiceDemo</string>
 
     <string name="main_message_help">HANET có thể giúp gì cho bạn?</string>
+    <string name="main_message_up_volume">Hãy thử \"Tăng âm lượng lên một chút\".</string>
+    <string name="main_message_down_volume">Hãy thử \" âm lượng lên một chút\".</string>
+    <string name="main_message_next_song">Hãy thử \" qua bài\".</string>
+    <string name="main_message_select_song">Hãy thử \" chọn bài hát abc xyz\".</string>
     <string name="main_message_error">Không nhận dạng được giọng nói. Vui lòng thử lại.</string>
+
+    <string-array name="hanet_hint">
+        <item>@string/main_message_help</item>
+        <item>@string/main_message_up_volume</item>
+        <item>@string/main_message_down_volume</item>
+        <item>@string/main_message_next_song</item>
+        <item>@string/main_message_select_song</item>
+        <item>@string/main_message_select_song</item>
+    </string-array>
 </resources>
